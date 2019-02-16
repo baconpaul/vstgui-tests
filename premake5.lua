@@ -27,7 +27,8 @@ flags
 
 includedirs
 {
-   "deps/vstgui.surge"
+   "deps/vstgui.surge",
+   "src"
 }
 
 defines
@@ -45,19 +46,11 @@ buildoptions
 files
 {
    "src/main.cpp",
-
+   "src/cocoa_minimal_main.mm",
+   
    -- a bit sloppy - deps are *ed in
    "deps/vstgui.surge/vstgui/vstgui_mac.mm",
    "deps/vstgui.surge/vstgui/vstgui_uidescription_mac.mm",
-
-   "deps/vstgui.surge/vstgui/standalone/source/*cpp",
-   "deps/vstgui.surge/vstgui/standalone/source/helpers/*cpp",
-   "deps/vstgui.surge/vstgui/standalone/source/platform/mac/*cpp",
-   "deps/vstgui.surge/vstgui/standalone/source/platform/mac/*mm",
-
-   -- This one should be sucked in but isn't so make it explicit
-   "deps/vstgui.surge/vstgui/uidescription/compresseduidescription.cpp"
-
 }
 
 links
