@@ -35,3 +35,4 @@ target/
 obj/
 VT.*
 vstgui-tests.*
+.DS_Store
