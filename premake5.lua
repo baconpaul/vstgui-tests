@@ -28,6 +28,7 @@ flags
 includedirs
 {
    "deps/vstgui.surge",
+   "deps/nanosvg/src",
    "src"
 }
 
@@ -47,8 +48,9 @@ files
 {
    "src/main.cpp",
    "src/cocoa_minimal_main.mm",
+   "src/nanosvg_link.cpp",
+   "src/CSvgDisplay.cpp",
    
-   -- a bit sloppy - deps are *ed in
    "deps/vstgui.surge/vstgui/vstgui_mac.mm",
    "deps/vstgui.surge/vstgui/vstgui_uidescription_mac.mm",
 }

@@ -2,6 +2,7 @@
 #include <iomanip>
 
 #include "cocoa_minimal_main.h"
+#include "CSvgDisplay.h"
 
 #include "vstgui/lib/cframe.h"
 #include "vstgui/lib/controls/ctextlabel.h"
@@ -29,8 +30,35 @@ void simpleFrameCB( VSTGUI::CFrame *f )
     }
 }
 
+void svgExampleCB( VSTGUI::CFrame *f )
+{
+    f->setBackgroundColor( VSTGUI::CColor( 200, 200, 210 ) );
+    std::cout << "SimpleFrameCB" << std::endl;
+    VSTGUI::CRect sz;
+    f->getSize(sz);
+
+    {
+        VSTGUI::CRect pos( VSTGUI::CPoint( 0, 0 ), VSTGUI::CPoint( sz.getWidth(), 20 ) );
+        VSTGUI::CTextLabel *l = new VSTGUI::CTextLabel(pos);
+        l->setText( "SVG Test" );
+        l->setBackColor( VSTGUI::kWhiteCColor );
+        l->setFontColor( VSTGUI::kBlueCColor );
+        l->setFrameColor( VSTGUI::kBlueCColor );
+        f->addView( l, pos );
+    }
+
+    {
+        VSTGUI::CRect pos( VSTGUI::CPoint( 10, 30 ), VSTGUI::CPoint( sz.getWidth() - 20, sz.getHeight() - 40 ) );
+        CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/drawing.svg" );
+        f->addView( d, pos );
+    }
+
+    
+}
+
 int main( int argc, char **argv )
 {
     // cocoa_minimal_main([](VSTGUI::CFrame *f) { std::cout << "Got a frame with address " << f << std::endl; } );
-    cocoa_minimal_main(1100, 600, simpleFrameCB);
+    // cocoa_minimal_main(1100, 600, simpleFrameCB);
+    cocoa_minimal_main(1100, 600, svgExampleCB);
 }
