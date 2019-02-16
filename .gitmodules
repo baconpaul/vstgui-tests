@@ -1,0 +1,3 @@
+[submodule "deps/vstgui.surge"]
+	path = deps/vstgui.surge
+	url = https://github.com/surge-synthesizer/vstgui.git

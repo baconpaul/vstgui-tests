@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+target/
+obj/
+VT.*
+vstgui-tests.*
