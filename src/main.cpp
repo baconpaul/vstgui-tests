@@ -49,8 +49,8 @@ void svgExampleCB( VSTGUI::CFrame *f )
 
     {
         VSTGUI::CRect pos( VSTGUI::CPoint( 10, 30 ), VSTGUI::CPoint( sz.getWidth() - 20, sz.getHeight() - 40 ) );
-        //CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/drawing.svg" );
-        CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/daves-123.svg" );
+        CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/drawing.svg" );
+        //CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/daves-123.svg" );
         f->addView( d, pos );
     }
 
