@@ -10,7 +10,7 @@ namespace VSTGUI
     void* gBundleRef = NULL; // FIXME - set this to the bundle!
 }
 
-void cocoa_minimal_main(std::function<void(VSTGUI::CFrame *f)> frameCb)
+void cocoa_minimal_main(int w, int h, std::function<void(VSTGUI::CFrame *f)> frameCb)
 {
     // Thanks http://www.cocoawithlove.com/2010/09/minimalist-cocoa-programming.html
     [NSAutoreleasePool new];
@@ -32,7 +32,7 @@ void cocoa_minimal_main(std::function<void(VSTGUI::CFrame *f)> frameCb)
 
       
 
-    id window = [[[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 700, 600)
+    id window = [[[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, w, h)
                                              styleMask:NSTitledWindowMask
                                                backing:NSBackingStoreBuffered
                                                  defer:NO]
@@ -42,7 +42,7 @@ void cocoa_minimal_main(std::function<void(VSTGUI::CFrame *f)> frameCb)
     [window makeKeyAndOrderFront:nil];
 
 
-    VSTGUI::CFrame *f = new VSTGUI::CFrame(VSTGUI::CRect(VSTGUI::CPoint(0,0),VSTGUI::CPoint(700,600)), NULL);
+    VSTGUI::CFrame *f = new VSTGUI::CFrame(VSTGUI::CRect(VSTGUI::CPoint(0,0),VSTGUI::CPoint(w, h)), NULL);
     f->open( [window contentView] );
     frameCb( f );
     

@@ -8,3 +8,6 @@ clean:
 
 clean-all:	clean
 	rm -rf obj target VT.xcworkspace vstgui-tests.xcodeproj
+
+run:	build
+	./target/Release/VstguiTests.app/Contents/MacOS/VstguiTests 

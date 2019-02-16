@@ -32,5 +32,5 @@ void simpleFrameCB( VSTGUI::CFrame *f )
 int main( int argc, char **argv )
 {
     // cocoa_minimal_main([](VSTGUI::CFrame *f) { std::cout << "Got a frame with address " << f << std::endl; } );
-    cocoa_minimal_main(simpleFrameCB);
+    cocoa_minimal_main(1100, 600, simpleFrameCB);
 }
