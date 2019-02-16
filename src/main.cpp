@@ -49,7 +49,8 @@ void svgExampleCB( VSTGUI::CFrame *f )
 
     {
         VSTGUI::CRect pos( VSTGUI::CPoint( 10, 30 ), VSTGUI::CPoint( sz.getWidth() - 20, sz.getHeight() - 40 ) );
-        CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/drawing.svg" );
+        //CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/drawing.svg" );
+        CSvgDisplay *d = new CSvgDisplay( pos, "resources/svg/daves-123.svg" );
         f->addView( d, pos );
     }
 
@@ -60,5 +61,5 @@ int main( int argc, char **argv )
 {
     // cocoa_minimal_main([](VSTGUI::CFrame *f) { std::cout << "Got a frame with address " << f << std::endl; } );
     // cocoa_minimal_main(1100, 600, simpleFrameCB);
-    cocoa_minimal_main(1100, 600, svgExampleCB);
+    cocoa_minimal_main(1100, 1100, svgExampleCB);
 }
