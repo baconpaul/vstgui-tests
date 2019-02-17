@@ -95,12 +95,13 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
                     std::cout << "   " << std::setw(8) <<  stop.offset << " " << std::hex << stop.color << std::dec << std::endl;
                     cg->addColorStop(stop.offset, svgColorToCColor(stop.color));
                 }
+                VSTGUI::CPoint s0(0,0), s1(0,1);
+                VSTGUI::CPoint p0 =    gradXform.inverse().transform( s0 );
+                VSTGUI::CPoint p1 =    gradXform.inverse().transform( s1 );
+                
                 dc->fillLinearGradient(gp, *cg,
-                                       VSTGUI::CPoint(shape->bounds[0],shape->bounds[1]),
-                                       VSTGUI::CPoint(shape->bounds[2],shape->bounds[3]),
+                                       p0, p1,
                                        evenOdd );
-                dc->setFrameColor(VSTGUI::kRedCColor);
-                dc->drawGraphicsPath(gp,VSTGUI::CDrawContext::kPathStroked);
             }
             else
             {
