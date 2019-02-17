@@ -56,6 +56,8 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
                     gp->beginSubpath(p[0],p[1]);
                 gp->addBezierCurve(p[2],p[3], p[4],p[5], p[6],p[7]);
             }
+            if( path->closed )
+                gp->closeSubpath();
         }
         if( shape->fill.type != NSVG_PAINT_NONE )
         {
@@ -120,6 +122,9 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
             }
             
             dc->setLineWidth(shape->strokeWidth);
+            VSTGUI::CLineStyle cs((VSTGUI::CLineStyle::LineCap)(shape->strokeLineCap),
+                                  (VSTGUI::CLineStyle::LineJoin)(shape->strokeLineJoin));
+            dc->setLineStyle(cs);
             dc->drawGraphicsPath(gp, VSTGUI::CDrawContext::kPathStroked );
         }
         gp->forget();
