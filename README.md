@@ -2,12 +2,15 @@
 
 Tests and experiments with vstgui akin to surge
 
+If you can build surge on mac you can build this probably.
+
 Just @baconpaul testbed basically
 
-To use it
+```
+git clone https://github.com/baconpaul/vstgui-tests.git
+cd vstgui-tests
+git submodule update --init --recursive
+make run
+```
 
-1: Be on a mac
-2: git clone; git submodule update
-3: type `make`
-
-PRs and additions welcomed. standards for incorporation way lower than for surge mainline.
+Mac only for now. If you want to port to another platform it's sort of designed to let you do that. PRs welcome
