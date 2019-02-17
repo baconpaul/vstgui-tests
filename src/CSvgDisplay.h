@@ -9,8 +9,13 @@ public:
 
     void resetFile( std::string fname );
     virtual void draw(VSTGUI::CDrawContext *p) override;
-
+    void setZoomCmd( int z )
+    {
+        zoomCmd = z;
+    }
+    
 private:
+    int zoomCmd;
     struct NSVGimage *image;
     VSTGUI::CColor svgColorToCColor(int svgColor, float opacity = 1.0);
 };

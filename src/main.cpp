@@ -58,13 +58,22 @@ struct SvgBrowser : public VSTGUI::IKeyboardHook
         f->getSize(sz);
         
         {
-            VSTGUI::CRect pos( VSTGUI::CPoint( 0, 0 ), VSTGUI::CPoint( sz.getWidth(), 20 ) );
+            VSTGUI::CRect pos( VSTGUI::CPoint( 0, 0 ), VSTGUI::CPoint( sz.getWidth()/2, 20 ) );
             l = new VSTGUI::CTextLabel(pos);
             l->setText( "SVG Test" );
             l->setBackColor( VSTGUI::kWhiteCColor );
             l->setFontColor( VSTGUI::kBlueCColor );
             l->setFrameColor( VSTGUI::kBlueCColor );
             f->addView( l, pos );
+
+            VSTGUI::CRect iPos( VSTGUI::CPoint( sz.getWidth()/2, 0), VSTGUI::CPoint( sz.getWidth()/2,20) );
+            VSTGUI::CTextLabel *ilab = new VSTGUI::CTextLabel(iPos);
+            ilab->setText( "Commands: n/p next and prev; 0 biggest; 1-4 1x-4x zoom" );
+            ilab->setBackColor( VSTGUI::kWhiteCColor );
+            ilab->setFontColor( VSTGUI::kBlueCColor );
+            ilab->setFrameColor( VSTGUI::kBlueCColor );
+            f->addView( ilab, pos );
+
         }
         
         {
@@ -104,6 +113,32 @@ struct SvgBrowser : public VSTGUI::IKeyboardHook
             pickFile(filePos);
             return 1;
             break;
+        case '0':
+            svgDisplay->setZoomCmd(0);
+            svgDisplay->invalid();
+            return 1;
+            break;
+        case '1':
+            svgDisplay->setZoomCmd(1);
+            svgDisplay->invalid();
+            return 1;
+            break;
+        case '2':
+            svgDisplay->setZoomCmd(2);
+            svgDisplay->invalid();
+            return 1;
+            break;
+        case '3':
+            svgDisplay->setZoomCmd(3);
+            svgDisplay->invalid();
+            return 1;
+            break;
+        case '4':
+            svgDisplay->setZoomCmd(4);
+            svgDisplay->invalid();
+            return 1;
+            break;
+
         }
         return -1;
     }

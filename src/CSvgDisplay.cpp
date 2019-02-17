@@ -5,7 +5,7 @@
 #include "vstgui/lib/cgraphicspath.h"
 #include "vstgui/lib/cgradient.h"
 
-CSvgDisplay::CSvgDisplay(const VSTGUI::CRect &size, std::string fn) : VSTGUI::CView(size), image( nullptr )
+CSvgDisplay::CSvgDisplay(const VSTGUI::CRect &size, std::string fn) : VSTGUI::CView(size), image( nullptr ), zoomCmd(0)
 {
     resetFile( fn );
 }
@@ -26,8 +26,24 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
     dc->setFrameColor(VSTGUI::kBlackCColor);
     dc->drawRect( viewS, VSTGUI::kDrawStroked );
 
-    float scaleF = std::min( viewS.getWidth() / image->width, viewS.getHeight() / image->height );
-    scaleF *= 0.9;
+    float scaleF = 1.0;
+    switch( zoomCmd )
+    {
+    case 0:
+        scaleF = std::min( viewS.getWidth() / image->width, viewS.getHeight() / image->height ) * 0.95;
+        break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+        scaleF = (float) zoomCmd;
+        break;
+    default:
+        std::cerr << "Invalid zoom cmd";
+        scaleF = 1.0;
+        break;
+    }
+
     std::cout << "Scale Factor is " << scaleF << std::endl;
 
     VSTGUI::CGraphicsTransform tf = VSTGUI::CGraphicsTransform().scale(scaleF, scaleF).translate( viewS.getTopLeft().x + 5, viewS.getTopLeft().y + 5 );
