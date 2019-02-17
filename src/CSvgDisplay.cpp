@@ -108,7 +108,7 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
                 for( int i=0; i<ngrad->nstops; ++i )
                 {
                     auto stop = ngrad->stops[ i ];
-                    std::cout << "   " << std::setw(8) <<  stop.offset << " " << std::hex << stop.color << std::dec << std::endl;
+                    std::cout << "ST  " << std::setw(8) <<  stop.offset << " " << std::setw(8) << std::hex << stop.color << std::dec << std::endl;
                     cg->addColorStop(stop.offset, svgColorToCColor(stop.color));
                 }
                 VSTGUI::CPoint s0(0,0), s1(0,1);
@@ -175,5 +175,6 @@ VSTGUI::CColor CSvgDisplay::svgColorToCColor(int svgColor, float opacity)
     int b = ( svgColor & 0x00FF0000 ) >> 16;
     int g = ( svgColor & 0x0000FF00 ) >> 8;
     int r = ( svgColor & 0x000000FF );
+    std::cout << "COLOR " << std::setw(8) << std::hex << svgColor << " as r=" << r << " g=" << g << " b=" << b << " a=" << a << std::dec << std::endl;
     return VSTGUI::CColor( r, g, b, a );
 }
