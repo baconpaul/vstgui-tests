@@ -95,14 +95,16 @@ struct SvgBrowser : public VSTGUI::IKeyboardHook
             std::cout << "Next image please" << std::endl;
             filePos ++; if( filePos >= files.size() ) filePos = 0;
             pickFile(filePos);
+            return 1;
             break;
         case 'p':
             std::cout << "Prior image please" << std::endl;
             filePos --; if( filePos <  0 ) filePos = files.size() - 1;
             pickFile(filePos);
+            return 1;
             break;
         }
-        return 1;
+        return -1;
     }
     virtual int32_t onKeyUp( const VstKeyCode &code, VSTGUI::CFrame *f) override {
         return -1;
