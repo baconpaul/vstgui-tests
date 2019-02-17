@@ -49,8 +49,6 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
         
         VSTGUI::CGraphicsPath *gp = dc->createGraphicsPath();
         for (auto path = shape->paths; path != NULL; path = path->next) {
-            std::cout << "   PATH with " << path->npts << " " << shape->id << std::endl;
-
             for (auto i = 0; i < path->npts-1; i += 3) {
                 float* p = &path->pts[i*2];
 
@@ -63,8 +61,9 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
         {
             if( shape->fill.type == NSVG_PAINT_COLOR )
             {
-                dc->setFillColor( svgColorToCColor( shape->fill.color ) );
-                std::cout << "Filling path with " << std::hex << shape->fill.color << std::endl;
+                dc->setFillColor( svgColorToCColor( shape->fill.color, shape->opacity ) );
+                
+                std::cout << "Filling path with " << std::hex << shape->fill.color << std::dec << std::endl;
                 VSTGUI::CDrawContext::PathDrawMode pdm = VSTGUI::CDrawContext::kPathFilled;
                 if( shape->fillRule == NSVGfillRule::NSVG_FILLRULE_EVENODD )
                 {
@@ -91,7 +90,7 @@ void CSvgDisplay::draw( VSTGUI::CDrawContext *dc )
                 for( int i=0; i<ngrad->nstops; ++i )
                 {
                     auto stop = ngrad->stops[ i ];
-                    std::cout << "   " << std::setw(8) <<  stop.offset << " " << std::hex << stop.color << std::endl;
+                    std::cout << "   " << std::setw(8) <<  stop.offset << " " << std::hex << stop.color << std::dec << std::endl;
                     cg->addColorStop(stop.offset, svgColorToCColor(stop.color));
                 }
                 dc->fillLinearGradient(gp, *cg,
@@ -148,9 +147,9 @@ void CSvgDisplay::resetFile(std::string fname)
     }
 
 }
-VSTGUI::CColor CSvgDisplay::svgColorToCColor(int svgColor)
+VSTGUI::CColor CSvgDisplay::svgColorToCColor(int svgColor, float opacity)
 {
-    int a = ( svgColor & 0xFF000000 ) >> 24;
+    int a = ( ( svgColor & 0xFF000000 ) >> 24 ) * opacity;
     int b = ( svgColor & 0x00FF0000 ) >> 16;
     int g = ( svgColor & 0x0000FF00 ) >> 8;
     int r = ( svgColor & 0x000000FF );

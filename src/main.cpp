@@ -81,6 +81,7 @@ struct SvgBrowser : public VSTGUI::IKeyboardHook
     }
 
     void pickFile( int filePos ) {
+        std::cout << "Picking file " << std::dec << filePos << " -> '" << files[filePos] << "'" << std::endl;
         svgDisplay->resetFile(files[filePos]);
         svgDisplay->invalid();
         l->setText(files[filePos].c_str());
@@ -99,7 +100,7 @@ struct SvgBrowser : public VSTGUI::IKeyboardHook
             break;
         case 'p':
             std::cout << "Prior image please" << std::endl;
-            filePos --; if( filePos <  0 ) filePos = files.size() - 1;
+            if( filePos == 0 ) filePos = files.size() - 1; else filePos--;
             pickFile(filePos);
             return 1;
             break;

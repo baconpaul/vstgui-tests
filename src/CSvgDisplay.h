@@ -12,5 +12,5 @@ public:
 
 private:
     struct NSVGimage *image;
-    VSTGUI::CColor svgColorToCColor(int svgColor);
+    VSTGUI::CColor svgColorToCColor(int svgColor, float opacity = 1.0);
 };
