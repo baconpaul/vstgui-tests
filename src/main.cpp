@@ -1,15 +1,23 @@
 #include <iostream>
 #include <iomanip>
 
+#if MAC
 #include "cocoa_minimal_main.h"
 #include "CSvgDisplay.h"
+#include "dirent.h"
+#endif
 
 #include "vstgui/lib/cframe.h"
 #include "vstgui/lib/controls/ctextlabel.h"
 
 #include <sstream>
 #include <vector>
-#include "dirent.h"
+
+#if WINDOWS
+#include <windows.h>
+#include "win32minimal.h"
+#endif
+
 
 class ShowClickLabel : public VSTGUI::CTextLabel {
 public:
@@ -34,15 +42,16 @@ void simpleFrameCB( VSTGUI::CFrame *f )
 {
     f->setBackgroundColor( VSTGUI::CColor( 200, 200, 210 ) );
     std::cout << "SimpleFrameCB" << std::endl;
-    for( int i=0; i<3; ++i )
+    std::vector<std::string> labs = { "RMB", "Center", "Left", "Side L", "Side R" };
+    for( int i=0; i<5; ++i )
     {
         std::cout << "Adding " << i << " th text" << std::endl;
-        VSTGUI::CRect pos = VSTGUI::CRect( VSTGUI::CPoint( 20 + i * 100 , 20 + i * 50  ),
+        VSTGUI::CRect pos = VSTGUI::CRect( VSTGUI::CPoint( 20 , 20 + i * 50  ),
                                            VSTGUI::CPoint( 200, 45 ) );
         ShowClickLabel *l = new ShowClickLabel( pos );
 
         std::ostringstream ss;
-        ss << "ClickMe " << i;
+        ss << "Click with Button " << labs[i];
         l->setText( ss.str().c_str() );
         l->setFontColor( VSTGUI::kRedCColor );
         l->setBackColor( VSTGUI::kWhiteCColor );
@@ -51,6 +60,7 @@ void simpleFrameCB( VSTGUI::CFrame *f )
     }
 }
 
+#if MAC
 struct SvgBrowser : public VSTGUI::IKeyboardHook
 {
     SvgBrowser(VSTGUI::CFrame *f) : frame(f)
@@ -177,10 +187,25 @@ void svgExampleCB( VSTGUI::CFrame *f )
     new SvgBrowser(f); // yeah I leak it but look this is just demo code, OK?
     
 }
+#endif
 
+#if MAC
 int main( int argc, char **argv )
 {
     // cocoa_minimal_main([](VSTGUI::CFrame *f) { std::cout << "Got a frame with address " << f << std::endl; } );
     // cocoa_minimal_main(1100, 600, simpleFrameCB);
-    cocoa_minimal_main(1100, 1100, simpleFrameCB);
+   cocoa_minimal_main(1100, 1100, simpleFrameCB);
 }
+#endif
+
+#if WINDOWS
+void *hInstance;
+
+int WINAPI wWinMain(HINSTANCE _hInstance, HINSTANCE hPrevInstance,
+		    PWSTR pCmdLine, int nCmdShow)
+{
+  hInstance = _hInstance;
+  return win32minimal_main(_hInstance, 1100, 1100, nCmdShow, simpleFrameCB );
+}
+#endif
+ 

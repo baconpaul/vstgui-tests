@@ -36,9 +36,22 @@ jobs:
 
 
   - bash: |
-      mkdir product_win
-      echo "DUMMY" > product_win/VstguiTest-dummy.zip
 
+      export PREMAKE_WINDOWS=https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-windows.zip
+      curl -L $PREMAKE_WINDOWS --output premake5.zip
+      unzip premake5.zip
+      popd
+
+      export PATH=$AGENT_TEMPDIRECTORY:$PATH
+      premake5 vs2017
+      msbuild VT.sln /p:Platform=x64 /p:Configuration=Release
+
+      mkdir product_win
+      cp target/Release/*exe product_win
+      cd product_win
+      7z.exe a *.exe VstGuiTest-Win.zip
+      rm *.exe
+      
     displayName: Build Windows 
     condition: variables.isWindows
 
