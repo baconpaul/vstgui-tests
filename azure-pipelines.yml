@@ -37,7 +37,7 @@ jobs:
 
   - bash: |
       mkdir product_win
-      touch product_win/vstguitest-dummy.zip
+      touch product_win/VstguiTest-dummy.zip
 
     displayName: Build Windows 
     condition: variables.isWindows
@@ -105,6 +105,6 @@ jobs:
       target: '$(Build.SourceVersion)'
       addChangeLog: false
       releaseNotesFile: $(Build.ArtifactStagingDirectory)/ReleaseNotes.md
-      assets: $(Build.ArtifactStagingDirectory)/*
+      assets: $(Build.ArtifactStagingDirectory)/V*.zip $(Build.ArtifactStagingDirectory)/V*.dmg
 
 
