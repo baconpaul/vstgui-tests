@@ -43,6 +43,14 @@ jobs:
     condition: variables.isWindows
 
   - bash: |
+      pushd $AGENT_TEMPDIRECTORY
+      export PREMAKE_MAC=https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-macosx.tar.gz
+      curl -L $PREMAKE_MAC --output premake5.tar.gz
+      tar zxvf premake5.tar.gz
+      popd
+
+      export PATH=$AGENT_TEMPDIRECTORY:$PATH
+  
       make dist
     displayName: Build Mac 
     condition: variables.isMac
@@ -50,14 +58,14 @@ jobs:
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'VSTGUI_MACOS'  
-      targetPath: 'products_mac/'
+      targetPath: 'product_mac/'
     displayName: Publish macOS Zip
     condition: variables.isMac
 
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'VSTGUI_WIN'  
-      targetPath: 'products_win/'
+      targetPath: 'product_win/'
     displayName: Publish Windows Zip
     condition: variables.isWindows
 
