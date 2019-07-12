@@ -58,7 +58,7 @@ jobs:
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'VSTGUI_MACOS'  
-      targetPath: 'product_mac/'
+      targetPath: 'product_macos/'
     displayName: Publish macOS Zip
     condition: variables.isMac
 
