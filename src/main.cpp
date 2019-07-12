@@ -11,6 +11,25 @@
 #include <vector>
 #include "dirent.h"
 
+class ShowClickLabel : public VSTGUI::CTextLabel {
+public:
+    ShowClickLabel( VSTGUI::CRect pos ) : CTextLabel(pos) {
+    }
+
+    virtual VSTGUI::CMouseEventResult onMouseDown(
+        VSTGUI::CPoint &where,
+        const VSTGUI::CButtonState &buttonState
+        ) override {
+        std::cout << "ONMOUSEDoOWN" << std::endl;
+        std::ostringstream ss;
+        ss << "BtSt=" << std::hex << buttonState();
+        setText(ss.str().c_str());
+        invalid();
+        std::cout << "SET TEXT TO " << ss.str() << std::endl;
+        return VSTGUI::CTextLabel::onMouseDown(where, buttonState);
+    }
+};
+
 void simpleFrameCB( VSTGUI::CFrame *f )
 {
     f->setBackgroundColor( VSTGUI::CColor( 200, 200, 210 ) );
@@ -18,12 +37,12 @@ void simpleFrameCB( VSTGUI::CFrame *f )
     for( int i=0; i<3; ++i )
     {
         std::cout << "Adding " << i << " th text" << std::endl;
-        VSTGUI::CRect pos = VSTGUI::CRect( VSTGUI::CPoint( 20 + i * 100 , 20 + i * 10  ),
-                                           VSTGUI::CPoint( 80, 30 ) );
-        VSTGUI::CTextLabel *l = new VSTGUI::CTextLabel( pos );
+        VSTGUI::CRect pos = VSTGUI::CRect( VSTGUI::CPoint( 20 + i * 100 , 20 + i * 50  ),
+                                           VSTGUI::CPoint( 200, 45 ) );
+        ShowClickLabel *l = new ShowClickLabel( pos );
 
         std::ostringstream ss;
-        ss << "Label " << i;
+        ss << "ClickMe " << i;
         l->setText( ss.str().c_str() );
         l->setFontColor( VSTGUI::kRedCColor );
         l->setBackColor( VSTGUI::kWhiteCColor );
@@ -163,5 +182,5 @@ int main( int argc, char **argv )
 {
     // cocoa_minimal_main([](VSTGUI::CFrame *f) { std::cout << "Got a frame with address " << f << std::endl; } );
     // cocoa_minimal_main(1100, 600, simpleFrameCB);
-    cocoa_minimal_main(1100, 1100, svgExampleCB);
+    cocoa_minimal_main(1100, 1100, simpleFrameCB);
 }
