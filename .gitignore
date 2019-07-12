@@ -36,3 +36,4 @@ obj/
 VT.*
 vstgui-tests.*
 .DS_Store
+product_*/

@@ -1,0 +1,102 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pr:
+- master
+
+jobs:
+- job: Build
+  strategy:
+    matrix:
+      mac:
+        imageName: 'macos-10.13'
+        isMac: True
+      windows:
+        imageName: 'vs2017-win2016'
+        isWindows: True
+
+  pool:
+    vmImage: $(imageName)
+
+  steps:
+  - checkout: self
+    fetchDepth: 1
+    # submodules: recursive # can't do submodules here b'cuz depth=1 fails with Github
+
+  - bash: |
+      uname -a
+      git submodule update --init --recursive
+
+    displayName: Submodules
+
+
+  - bash: |
+      mkdir product_win
+      touch product_win/vstguitest-dummy.zip
+
+    displayName: Build Windows 
+    condition: variables.isWindows
+
+  - bash: |
+      make dist
+    displayName: Build Mac 
+    condition: variables.isMac
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'VSTGUI_MACOS'  
+      targetPath: 'products_mac/'
+    displayName: Publish macOS Zip
+    condition: variables.isMac
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'VSTGUI_WIN'  
+      targetPath: 'products_win/'
+    displayName: Publish Windows Zip
+    condition: variables.isWindows
+
+
+- job: UpdateGithubRelease
+  dependsOn: Build
+  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/azure-test')))
+
+  steps:
+
+  - task: DownloadPipelineArtifact@0
+    inputs:
+      artifactName: 'VSTGUI_MACOS'
+      targetPath: $(Build.ArtifactStagingDirectory)
+
+  - task: DownloadPipelineArtifact@0
+    inputs:
+      artifactName: 'VSTGUI_WIN'
+      targetPath: $(Build.ArtifactStagingDirectory)
+
+  - bash: |
+     ls -l $(Build.ArtifactStagingDirectory)
+     export EXTEND_TAG=`date "+%Y%m%d"`
+     for file in $(Build.ArtifactStagingDirectory)/*.zip; do mv "$file" "${file/.zip/-${EXTEND_TAG}.zip}"; done
+     for file in $(Build.ArtifactStagingDirectory)/*.dmg; do mv "$file" "${file/.dmg/-${EXTEND_TAG}.dmg}"; done
+     ls -l $(Build.ArtifactStagingDirectory)         
+     echo "Release" > $(Build.ArtifactStagingDirectory)/ReleaseNotes.md
+    displayName: Tag asset names with Date
+
+  - task: GitHubRelease@0
+    displayName: "Update Github Release"
+    inputs:
+      gitHubConnection: baconpaul
+      repositoryName: baconpaul/vstgui-tests
+      action: edit
+      tag: Nightly
+      target: '$(Build.SourceVersion)'
+      addChangeLog: false
+      releaseNotesFile: $(Build.ArtifactStagingDirectory)/ReleaseNotes.md
+      assets: $(Build.ArtifactStagingDirectory)/*
+
+
