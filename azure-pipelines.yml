@@ -36,24 +36,36 @@ jobs:
 
 
   - bash: |
-
+      pushd $AGENT_TEMPDIRECTORY
       export PREMAKE_WINDOWS=https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-windows.zip
       curl -L $PREMAKE_WINDOWS --output premake5.zip
       unzip premake5.zip
       popd
 
       export PATH=$AGENT_TEMPDIRECTORY:$PATH
-      premake5 vs2017
-      msbuild VT.sln /p:Platform=x64 /p:Configuration=Release
+      premake5 --file=premake5-win.lua vs2017
+      ls -alFh
+    displayName: Build Windows 
+    condition: variables.isWindows
 
+  - task: MSBuild@1
+    inputs:
+      solution: 'VT.sln'
+      maximumCpuCount: true
+      platform: 'x64'
+      configuration: 'Release'
+    condition: variables.isWindows
+    displayName: Build Windows
+
+    - bash: |
       mkdir product_win
       cp target/Release/*exe product_win
       cd product_win
       7z.exe a *.exe VstGuiTest-Win.zip
       rm *.exe
-      
-    displayName: Build Windows 
+    displayName: Package Windows 
     condition: variables.isWindows
+      
 
   - bash: |
       pushd $AGENT_TEMPDIRECTORY
