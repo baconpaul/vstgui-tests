@@ -61,7 +61,7 @@ jobs:
       mkdir product_win
       cp target/Release/*exe product_win
       cd product_win
-      7z.exe a *.exe VstGuiTest-Win.zip
+      7z.exe a VstGuiTest-Win.zip *.exe
       rm *.exe
     displayName: Package Windows 
     condition: variables.isWindows
