@@ -57,7 +57,7 @@ jobs:
     condition: variables.isWindows
     displayName: Build Windows
 
-    - bash: |
+  - bash: |
       mkdir product_win
       cp target/Release/*exe product_win
       cd product_win
